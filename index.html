@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Masjid Baitul Jihad — Beranda &amp; Jadwal Shalat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="assets/images/logo.png" alt="Logo Masjid Baitul Jihad">
+        <div>
+          <div class="brand-name">Masjid Baitul Jihad</div>
+          <div class="brand-sub">Kemang Pratama 2 Bekasi</div>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="active">Beranda</a>
+        <a href="tentang.html">Tentang Masjid</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-img"><img src="assets/images/hero.png" alt="Kemegahan Arsitektur Masjid Baitul Jihad"></div>
+      <div class="hero-content">
+        <h1>Selamat Datang di <span class="title-italic">Masjid Baitul Jihad</span></h1>
+        <p>Tempat kita bersujud dengan tenang, merajut ukhuwah islamiyah, mendalami ilmu yang menuntun, serta berbagi kepedulian nyata dalam naungan keberkahan Ilahi.</p>
+      </div>
+    </section>
+
+    <section class="prayer-wrap" aria-label="Jadwal Shalat">
+      <div class="prayer-card" id="prayer-card" data-state="loading">
+        <div class="prayer-head">
+          <div>
+            <h2><img src="assets/icons/clock-outline.svg" alt="">Jadwal Shalat Hari Ini</h2>
+            <p id="date-line">Memuat jadwal… • Waktu Indonesia Barat (WIB)</p>
+          </div>
+          <div class="city-chip"><img src="assets/icons/location-pin.svg" alt="">Kota Bekasi</div>
+        </div>
+
+        <div class="prayer-error" id="prayer-error" role="alert">
+          <img src="assets/images/jadwal-error.svg" alt="" width="200" height="133">
+          <h3>Jadwal Sholat sedang tidak bisa ditampilkan</h3>
+          <p>Kami belum berhasil mengambil data jadwal shalat. Silakan periksa koneksi internet Anda lalu coba lagi beberapa saat.</p>
+          <button type="button" class="retry-btn" id="prayer-retry">Coba lagi</button>
+        </div>
+
+        <div class="next-bar">
+          <div class="mosaic"><img src="assets/images/mosaic-pattern.jpg" alt=""></div>
+          <div class="next-info">
+            <div class="next-icon"><img src="assets/icons/clock.svg" alt=""></div>
+            <div>
+              <div class="next-label">
+                <span class="eyebrow">Waktu shalat berikutnya</span>
+              </div>
+              <div class="next-line">
+                <div class="next-name" id="next-name">--:-- WIB</div>
+                <span class="pill">Iqamah +10m</span>
+              </div>
+            </div>
+          </div>
+          <div class="countdown" id="countdown">
+            <div class="cd-unit"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Jam</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-unit"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Menit</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-unit"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Detik</span></div>
+          </div>
+        </div>
+
+        <div class="timetable">
+          <div class="slot" data-prayer="imsak"><span class="slot-badge">Berikutnya</span><span class="slot-name">Imsak</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="subuh"><span class="slot-badge">Berikutnya</span><span class="slot-name">Subuh</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="terbit"><span class="slot-badge">Berikutnya</span><span class="slot-name">Syuruq</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="dzuhur"><span class="slot-badge">Berikutnya</span><span class="slot-name">Dzuhur</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="ashar"><span class="slot-badge">Berikutnya</span><span class="slot-name">Ashar</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="maghrib"><span class="slot-badge">Berikutnya</span><span class="slot-name">Maghrib</span><span class="slot-time">--:--</span></div>
+          <div class="slot" data-prayer="isya"><span class="slot-badge">Berikutnya</span><span class="slot-name">Isya</span><span class="slot-time">--:--</span></div>
+        </div>
+
+        <p class="prayer-source">Sumber data: <a href="https://api.myquran.com/" target="_blank" rel="noopener">MyQuran API</a> • mengacu pada jadwal resmi <a href="https://bimasislam.kemenag.go.id/jadwalshalat" target="_blank" rel="noopener">Kemenag Bimas Islam</a>.</p>
+      </div>
+    </section>
+
+    <section class="kajian" aria-label="Kajian Terbaru">
+      <article class="kajian-card" data-slot="sabtu">
+        <div>
+          <h3><img src="assets/icons/book.svg" alt="">Kajian Sunnah Ilmiah</h3>
+          <div class="kajian-body" data-state="empty">
+            <a class="video-thumb" href="https://www.youtube.com/@Baitulj" target="_blank" rel="noopener" aria-label="Buka kanal YouTube Masjid Baitul Jihad">
+              <img data-field="thumb" src="assets/images/kajian-sabtu.jpg" alt="">
+              <div class="video-overlay"><div class="play-btn"><img src="assets/icons/play.svg" alt=""></div></div>
+            </a>
+            <div class="kajian-text">
+              <h4 data-field="title">Video terbaru belum tersedia</h4>
+              <div class="kajian-stats">
+                <p data-field="meta">Dipublikasikan di YouTube</p>
+                <p data-field="views">Kanal YouTube Masjid Baitul Jihad</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="kajian-card" data-slot="ahad">
+        <div>
+          <h3><img src="assets/icons/book.svg" alt="">Kajian Sunnah Ilmiah</h3>
+          <div class="kajian-body" data-state="empty">
+            <a class="video-thumb" href="https://www.youtube.com/@Baitulj" target="_blank" rel="noopener" aria-label="Buka kanal YouTube Masjid Baitul Jihad">
+              <img data-field="thumb" src="assets/images/kajian-sabtu.jpg" alt="">
+              <div class="video-overlay"><div class="play-btn"><img src="assets/icons/play.svg" alt=""></div></div>
+            </a>
+            <div class="kajian-text">
+              <h4 data-field="title">Video terbaru belum tersedia</h4>
+              <div class="kajian-stats">
+                <p data-field="meta">Dipublikasikan di YouTube</p>
+                <p data-field="views">Kanal YouTube Masjid Baitul Jihad</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" aria-label="Galeri">
+      <div class="section-head">
+        <span class="eyebrow">Galeri Dokumentasi</span>
+        <h2>Suasana &amp; Kegiatan Keummatan</h2>
+      </div>
+      <div class="gallery">
+        <figure class="photo">
+          <img src="assets/images/gallery-1.jpg" alt="Kajian Sunnah Ilmiah">
+          <figcaption class="photo-caption"><strong>Kajian Sunnah Ilmiah</strong><span>Setiap Ba’da Subuh Sabtu, Minggu &amp; Libur Nasional</span></figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="assets/images/gallery-2.jpg" alt="Tadarus Bersama">
+          <figcaption class="photo-caption"><strong>Tadarus Bersama</strong><span>Setiap Malam Minggu</span></figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="assets/images/gallery-3.jpg" alt="Taklim Ibu-Ibu (MTI)">
+          <figcaption class="photo-caption"><strong>Taklim Ibu-Ibu (MTI)</strong><span>Kajian &amp; Ceramah</span></figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="assets/images/gallery-4.jpg" alt="Kegiatan Sekolah">
+          <figcaption class="photo-caption"><strong>Kegiatan Sekolah</strong><span>Sholat Berjamaah &amp; Tadarus</span></figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand"><strong>Masjid Baitul Jihad</strong><span>Kemang Pratama 2 Bekasi</span></div>
+        <p class="footer-addr">Jl. Kemang Dahlia Raya<br>Kemang Pratama 2<br>Kel. Bojong Rawalumbu, Kec. Rawalumbu<br>Kota Bekasi, Jawa Barat 17116.</p>
+        <div class="footer-contact">
+          <div><img src="assets/icons/phone.svg" width="18" height="18" alt="">+62081188810858</div>
+          <div><img src="assets/icons/mail.svg" width="20" height="16" alt="">baitulj@gmail.com</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Layanan Darurat &amp; Ummat</h4>
+        <div>
+          <div class="service"><img src="assets/icons/hotline.svg" alt=""><div>Hotline Jenazah 24 Jam<br>0811-8881-0858<br>(Siaga Ambulans &amp; Pemulasaraan)</div></div>
+          <div class="service"><img src="assets/icons/ambulance.svg" alt=""><div>Ambulans Gratis Dhuafa<br>0811-8881-0858<br>(Layanan Pasien &amp; Bencana)</div></div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Rekening Donasi Syariah</h4>
+        <p>Salurkan infaq, sedekah, dan wakaf<br>melalui rekening resmi:</p>
+        <div class="bank-card">
+          <div class="bank-row"><span>BCA Syariah</span><b>0041 000050</b></div>
+          <div class="bank-row"><span>Bank Syariah Indonesia</span><b>-</b></div>
+          <div class="bank-owner">a.n. YAYASAN BAITUL JIHAD</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Jadwal Shalat Hari Ini</h4>
+        <div class="mini-times">
+          <div class="mini-time" data-mini="subuh" data-label="Subuh"><small>Subuh</small><span>--:--</span></div>
+          <div class="mini-time" data-mini="dzuhur" data-label="Dzuhur"><small>Dzuhur</small><span>--:--</span></div>
+          <div class="mini-time" data-mini="ashar" data-label="Ashar"><small>Ashar</small><span>--:--</span></div>
+          <div class="mini-time" data-mini="maghrib" data-label="Maghrib"><small>Maghrib</small><span>--:--</span></div>
+          <div class="mini-time" data-mini="isya" data-label="Isya"><small>Isya</small><span>--:--</span></div>
+          <div class="mini-time" data-mini="terbit" data-label="Syuruq"><small>Syuruq</small><span>--:--</span></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/youtube.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+name: Update video YouTube
+
+on:
+  schedule:
+    # 00:00 UTC = 07:00 WIB, every day.
+    # Saturday replaces the "sabtu" card, Sunday the "ahad" card; other days refresh view counts.
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'Slot to refresh (sabtu / ahad). Leave empty to follow today (WIB)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch latest video
+        env:
+          SLOT: ${{ github.event.inputs.slot }}
+        run: node scripts/fetch-youtube.mjs "$SLOT"
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/youtube.json
+          git diff --cached --quiet || git commit -m "chore: update video youtube"
+          git push

@@ -1,0 +1,26 @@
+{
+  "channel": {
+    "name": "Masjid Baitul Jihad",
+    "url": "https://www.youtube.com/@Baitulj"
+  },
+  "slots": {
+    "ahad": {
+      "id": "WLIvoKbZbpg",
+      "title": "Ustadz. Dedi Ahmad Syaikhu, Lc, M.A -  Kajian Sunnah Ilmiah",
+      "url": "https://www.youtube.com/watch?v=WLIvoKbZbpg",
+      "thumbnail": "https://i.ytimg.com/vi/WLIvoKbZbpg/hqdefault.jpg",
+      "published": "2026-10-03T23:15:16+00:00",
+      "views": 9,
+      "fetchedAt": "2026-10-04T10:45:07.805Z"
+    },
+    "sabtu": {
+      "id": "bMWw02zEHBo",
+      "title": "Ustdz. Mokhammad Subkhan SHI, MHI -  Kajian Sunnah Ilmiah",
+      "url": "https://www.youtube.com/watch?v=bMWw02zEHBo",
+      "thumbnail": "https://i.ytimg.com/vi/bMWw02zEHBo/hqdefault.jpg",
+      "published": "2026-10-03T10:50:52+00:00",
+      "views": 72,
+      "fetchedAt": "2026-10-04T10:38:56.947Z"
+    }
+  }
+}

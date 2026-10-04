@@ -1,0 +1,30 @@
+name: Update jadwal shalat
+
+on:
+  schedule:
+    # 17:00 UTC on the 25th (00:00 WIB on the 26th) — fetches this month and next month
+    - cron: '0 17 25 * *'
+    # Also refresh on the 1st in case a month was missed
+    - cron: '0 17 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch schedule from MyQuran
+        run: node scripts/fetch-jadwal.mjs
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "chore: update jadwal shalat"
+          git push
