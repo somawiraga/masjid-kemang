@@ -2,16 +2,17 @@
   // ---------- Prayer schedule ----------
   var CITY_ID = 1221; // KOTA BEKASI
   var LIVE_API = 'https://api.myquran.com/v2/sholat/jadwal/' + CITY_ID + '/';
-  var FIELDS = ['imsak', 'subuh', 'terbit', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+  var FIELDS = ['subuh', 'terbit', 'dzuhur', 'ashar', 'maghrib', 'isya'];
   var TIME_RE = /^\d{2}:\d{2}$/;
+  // `hold` = how long (minutes) a prayer stays highlighted as "current" after its time.
+  // null = until midnight (00:00).
   var ORDER = [
-    { key: 'imsak', label: 'Imsak' },
-    { key: 'subuh', label: 'Subuh' },
-    { key: 'terbit', label: 'Syuruq' },
-    { key: 'dzuhur', label: 'Dzuhur' },
-    { key: 'ashar', label: 'Ashar' },
-    { key: 'maghrib', label: 'Maghrib' },
-    { key: 'isya', label: 'Isya' }
+    { key: 'subuh', label: 'Subuh', hold: 60 },
+    { key: 'terbit', label: 'Syuruq', hold: 60 },
+    { key: 'dzuhur', label: 'Dzuhur', hold: 60 },
+    { key: 'ashar', label: 'Ashar', hold: 60 },
+    { key: 'maghrib', label: 'Maghrib', hold: 30 },
+    { key: 'isya', label: 'Isya', hold: null }
   ];
 
   var card = document.getElementById('prayer-card');
@@ -113,13 +114,23 @@
     setMini(today.times);
   }
 
-  // Next prayer relative to now; after Isya it rolls over to tomorrow's Imsak
+  // Returns the prayer that is still "current" (inside its highlight window), if any
+  function findCurrent(now) {
+    for (var i = 0; i < ORDER.length; i++) {
+      var start = toSeconds(today.times[ORDER[i].key]);
+      var end = ORDER[i].hold === null ? 86400 : start + ORDER[i].hold * 60;
+      if (now.seconds >= start && now.seconds < end) return ORDER[i];
+    }
+    return null;
+  }
+
+  // Next prayer after now; after the last prayer it is tomorrow's Subuh
   function findNext(now) {
     for (var i = 0; i < ORDER.length; i++) {
       var t = toSeconds(today.times[ORDER[i].key]);
       if (t > now.seconds) return { item: ORDER[i], time: today.times[ORDER[i].key], remaining: t - now.seconds };
     }
-    var src = (tomorrow || today).times.imsak;
+    var src = (tomorrow || today).times.subuh;
     return { item: ORDER[0], time: src, remaining: 86400 - now.seconds + toSeconds(src) };
   }
 
@@ -128,19 +139,33 @@
     if (loadedDate !== dateStr(now.y, now.m, now.d)) { load(); return; } // day rolled over
     if (!today || !card) return;
 
+    var current = findCurrent(now);
     var next = findNext(now);
+    var shown = current || next.item;                 // prayer to highlight
+    var mode = current ? 'current' : 'next';
+    var time = today.times[shown.key];
+
+    // The countdown (to the next prayer) is only shown once the "Berikutnya" state starts
+    $('countdown').hidden = mode === 'current';
     $('cd-h').textContent = pad(Math.floor(next.remaining / 3600));
     $('cd-m').textContent = pad(Math.floor((next.remaining % 3600) / 60));
     $('cd-s').textContent = pad(next.remaining % 60);
-    $('next-name').textContent = next.item.label + ' — ' + next.time + ' WIB';
+    $('next-name').textContent = shown.label + ' — ' + time + ' WIB';
 
-    if (next.item.key !== currentKey) {
-      currentKey = next.item.key;
-      slots.forEach(function (el) { el.classList.toggle('active', el.dataset.prayer === currentKey); });
-      miniSlots.forEach(function (el) {
-        var active = el.dataset.mini === currentKey;
+    var stateKey = mode + ':' + shown.key;
+    if (stateKey !== currentKey) {
+      currentKey = stateKey;
+      var suffix = mode === 'current' ? 'Saat Ini' : 'Berikutnya';
+      $('next-title').textContent = 'Waktu shalat ' + suffix.toLowerCase();
+      slots.forEach(function (el) {
+        var active = el.dataset.prayer === shown.key;
         el.classList.toggle('active', active);
-        el.querySelector('small').textContent = el.dataset.label + (active ? ' (Berikutnya)' : '');
+        el.querySelector('.slot-badge').textContent = suffix;
+      });
+      miniSlots.forEach(function (el) {
+        var active = el.dataset.mini === shown.key;
+        el.classList.toggle('active', active);
+        el.querySelector('small').textContent = el.dataset.label + (active ? ' (' + suffix + ')' : '');
       });
     }
   }
