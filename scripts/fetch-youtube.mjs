@@ -48,10 +48,26 @@ function todaySlotWIB() {
   return day === 6 ? 'sabtu' : day === 0 ? 'ahad' : null;
 }
 
-const res = await fetch(FEED);
-if (!res.ok) throw new Error(`YouTube feed returned HTTP ${res.status}`);
-const videos = parseFeed(await res.text());
-if (!videos.length) throw new Error('No videos found in the feed');
+// YouTube's RSS feed sometimes returns 404 for days; try twice, then keep the saved data.
+const ATTEMPTS = 2;
+const RETRY_DELAY_MS = 10_000;
+let videos = [];
+for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+  try {
+    const res = await fetch(FEED);
+    if (!res.ok) throw new Error(`YouTube feed returned HTTP ${res.status}`);
+    videos = parseFeed(await res.text());
+    if (!videos.length) throw new Error('No videos found in the feed');
+    break;
+  } catch (err) {
+    console.warn(`Attempt ${attempt}/${ATTEMPTS} failed: ${err.message}`);
+    if (attempt < ATTEMPTS) await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+  }
+}
+if (!videos.length) {
+  console.warn('Feed unavailable; leaving data/youtube.json unchanged.');
+  process.exit(0);
+}
 
 let data = { channel: { name: 'Masjid Baitul Jihad', url: 'https://www.youtube.com/@Baitulj' }, slots: {} };
 try {
